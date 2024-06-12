@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Start Game</title>
+    <style>
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .card-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+        }
+        .card-box {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 10px;
+            width: 60%;
+            height: 80%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background-color: white;
+        }
+        .card-box h3 {
+            margin-top: 0;
+            font-weight: bold;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        .question, .answer {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .answer {
+            display: none;
+        }
+        .show-hint-btn, .show-answer-btn {
+            margin-top: 10px;
+            margin-right: 10px;
+            padding: 10px 20px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            cursor: pointer;
+            background-color: #007bff; /* Blue background */
+            color: white;
+        }
+        .show-answer-btn {
+            background-color: #28a745; /* Green background */
+        }
+        .back-btn {
+            display: none;
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            cursor: pointer;
+            background-color: #6c757d; /* Gray background */
+            color: white;
+        }
+        .navigation-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .ui.button {
+            width: 100px;
+        }
+        .feedback-buttons {
+            display: none;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .feedback-buttons button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 3px;
+            cursor: pointer;
+            color: white;
+            border: none;
+        }
+        .right-btn {
+            background-color: #4caf50; /* Green */
+        }
+        .wrong-btn {
+            background-color: #f44336; /* Red */
+        }
+        .answered-message {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 20px;
+            display: none;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Available Cards</h1>
+    <div class="card-container">
+        <div class="card-box">
+            <h3>{{ card.topic }}</h3>
+            <p class="question">Question: {{ card.question }}</p>
+            <p class="answer">Answer: {{ card.answer }}</p>
+            <div class="button-container">
+                <button class="show-hint-btn">Show Hint</button>
+                <button class="show-answer-btn">Show Answer</button>
+            </div>
+            <button class="back-btn">Back</button>
+            <div class="feedback-buttons">
+                <button class="ui button right-btn" style="background-color: #4caf50; color: white;">Right</button>
+                <button class="ui button wrong-btn" style="background-color: #f44336; color: white;">Wrong</button>
+            </div>
+            <div class="answered-message">You have already answered this question</div>
+            <div class="navigation-buttons">
+                {% if page > 1 %}
+                    <a class="ui button" href="{% if topic %}{{ url_for('start_game_by_topic', topic=topic, page=page - 1) }}{% else %}{{ url_for('start_game', page=page - 1) }}{% endif %}">Previous</a>
+                {% endif %}
+                {% if page < total_cards %}
+                    <a class="ui button" href="{% if topic %}{{ url_for('start_game_by_topic', topic=topic, page=page + 1) }}{% else %}{{ url_for('start_game', page=page + 1) }}{% endif %}">Next</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script>
+        var showHintBtn = document.querySelector('.show-hint-btn');
+        var showAnswerBtn = document.querySelector('.show-answer-btn');
+        var backBtn = document.querySelector('.back-btn');
+        var question = document.querySelector('.question');
+        var answer = document.querySelector('.answer');
+        var feedbackButtons = document.querySelector('.feedback-buttons');
+        var answeredMessage = document.querySelector('.answered-message');
+
+        var flag = ''; // Initialize flag variable
+
+        // Function to handle feedback button clicks
+        function handleFeedback(flagValue) {
+            flag = flagValue;
+            // Make a POST request to update the flags
+            fetch('/start_game', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    flag: flag,
+                    card_id: {{ card.id }}, // Assuming card.id is available in the template
+                    page: {{ page }}
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle response if needed
+                console.log(data);
+                if (flag !== 'hint_used') {
+                    feedbackButtons.style.display = 'none';
+                    answeredMessage.style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        // Add event listener for "Show Hint" button
+        showHintBtn.addEventListener('click', function() {
+            var hint = {{ card.hint|tojson }};
+            alert("Hint: " + hint);
+
+            // Make a POST request to update hint usage
+            handleFeedback('hint_used');
+        });
+
+        // Add event listener for "Show Answer" button
+        showAnswerBtn.addEventListener('click', function() {
+            question.style.display = 'none';
+            answer.style.display = 'block';
+            showAnswerBtn.style.display = 'none';
+            showHintBtn.style.display = 'none';
+            backBtn.style.display = 'block';
+            feedbackButtons.style.display = 'flex';
+        });
+
+        // Add event listener for "Back" button
+        backBtn.addEventListener('click', function() {
+            question.style.display = 'block';
+            answer.style.display = 'none';
+            showAnswerBtn.style.display = 'block';
+            showHintBtn.style.display = 'block';
+            backBtn.style.display = 'none';
+            feedbackButtons.style.display = 'none';
+            answeredMessage.style.display = 'none'; // Hide answered message on back button click
+        });
+
+        // Add event listeners for feedback buttons
+        document.querySelector('.right-btn').addEventListener('click', function() {
+            handleFeedback('right');
+        });
+
+        document.querySelector('.wrong-btn').addEventListener('click', function() {
+            handleFeedback('wrong');
+        });
+    </script>
+</body>
+</html>
+{% endblock %}

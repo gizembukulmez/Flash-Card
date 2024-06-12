@@ -1,0 +1,17 @@
+alembic
+click
+Flask
+Flask-Login
+Flask-WTF
+gunicorn
+itsdangerous
+Jinja2
+Mako
+Pygments
+python-dateutil
+python-editor
+six
+Werkzeug
+WTForms
+email-validator
+pytest-flask

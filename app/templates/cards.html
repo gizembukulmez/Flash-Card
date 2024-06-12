@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/codestyles.css') }}">
+{% endblock %}
+{% block content %}
+    <div class="ui segment" style="margin-top: 50px;">
+        <!-- Display Topic and Card Counts -->
+        <div class="ui statistics">
+            <div class="statistic">
+                <div class="value">
+                    {{ all_topics_len }}
+                </div>
+                <div class="label">
+                    Topics
+                </div>
+            </div>
+            <div class="statistic">
+                <div class="value">
+                    {{ total_cards }}
+                </div>
+                <div class="label">
+                    Cards
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Form -->
+        <form class="ui form" method="GET" action="{{ url_for('get_card_topic') }}">
+            <div class="field">
+                <label for="topic">Filter by Topic</label>
+                <select name="topic" id="topic" class="ui dropdown">
+                    {% for topic in all_topics %}
+                        <option value="{{ topic }}">{{ topic }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button class="ui button" type="submit">Filter</button>
+        </form>
+    </div>
+
+    <!-- Display Cards (Filtered) -->
+    {% if cards %}
+        <div class="ui stackable grid" style="margin-top: 20px;">
+            {% for card in cards %}
+                <div class="four wide column">
+                    <div class="ui fluid card">
+                        <div class="content">
+                            <div class="header">{{ card.question }}</div>
+                            <div class="meta">{{ card.topic }}</div>
+                        </div>
+                        <div class="extra content">
+                            <a class="ui button" href="{{ url_for('edit', card_id=card.id) }}">Edit</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,79 @@
+1.0) LOGIN ERROR : When typing user_name and password
+-------------------------------------------------
+USER MESSAGE: 
+Internal Server Error
+The server encountered an internal error and was unable to complete your request. 
+Either the server is overloaded or there is an error in the application.
+
+[2024-06-10 00:09:18,820] ERROR in app: Exception on /login [POST]
+Traceback (most recent call last):
+  File "C:\Users\jayes\anaconda3\Lib\hmac.py", line 60, in __init__
+    self._init_hmac(key, msg, digestmod)
+  File "C:\Users\jayes\anaconda3\Lib\hmac.py", line 67, in _init_hmac
+    self._hmac = _hashopenssl.hmac_new(key, msg, digestmod=digestmod)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_hashlib.UnsupportedDigestmodError: [digital envelope routines] unsupported
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\jayes\anaconda3\Lib\hashlib.py", line 160, in __hash_new
+    return _hashlib.new(name, data, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_hashlib.UnsupportedDigestmodError: [digital envelope routines] unsupported
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\jayes\anaconda3\Lib\site-packages\flask\app.py", line 2525, in wsgi_app      
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jayes\anaconda3\Lib\site-packages\flask\app.py", line 1822, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jayes\anaconda3\Lib\site-packages\flask\app.py", line 1820, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jayes\anaconda3\Lib\site-packages\flask\app.py", line 1796, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Etudes\_flashcards_flask\s_flashcard\team14\app\routes.py", line 53, in login      
+    json_status = update_user_json({"username": form.username.data, "password": form.password.data}, "login")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Etudes\_flashcards_flask\s_flashcard\team14\app\utils.py", line 22, in update_user_json
+    if check_password_hash(user_data[user_details['username']]['password_hash'], user_details['password']):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jayes\anaconda3\Lib\site-packages\werkzeug\security.py", line 107, in check_password_hash
+    return hmac.compare_digest(_hash_internal(method, salt, password)[0], hashval)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jayes\anaconda3\Lib\site-packages\werkzeug\security.py", line 55, in _hash_internal
+    return hmac.new(salt, password, method).hexdigest(), method
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jayes\anaconda3\Lib\hmac.py", line 184, in new
+    return HMAC(key, msg, digestmod)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jayes\anaconda3\Lib\hmac.py", line 62, in __init__
+    self._init_old(key, msg, digestmod)
+  File "C:\Users\jayes\anaconda3\Lib\hmac.py", line 80, in _init_old
+    self._outer = digest_cons()
+                  ^^^^^^^^^^^^^
+  File "C:\Users\jayes\anaconda3\Lib\hmac.py", line 75, in <lambda>
+    digest_cons = lambda d=b'': _hashlib.new(digestmod, d)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jayes\anaconda3\Lib\hashlib.py", line 166, in __hash_new
+    return __get_builtin_constructor(name)(data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jayes\anaconda3\Lib\hashlib.py", line 123, in __get_builtin_constructor
+    raise ValueError('unsupported hash type ' + name)
+ValueError: unsupported hash type scrypt:32768:8:1
+127.0.0.1 - - [10/Jun/2024 00:09:18] "POST /login?next=%2F HTTP/1.1" 500 -
+
+
+2) Screen does nothing - not even error message when only user_name is entered without password 
+   and vice versa.
+
+3) Same username & password not allowed - works 
+
+4) Invalid email-id's accepted: eg; _jan8094@thi.de 
+
+6) Back button not working 

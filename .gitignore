@@ -1,16 +1,40 @@
-.venv/
+# Venv
+venv/
 
-*.pyc
+# IDEs
+.vscode/
+.idea/
+
+# Cache
+*.py[co]
+*.DS_*
 __pycache__/
-
-instance/
-
 .pytest_cache/
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
 .coverage
-htmlcov/
+.tox
 
-dist/
-build/
-*.egg-info/
+#Translations
+*.mo
 
-logs.txt
+#Mr Developer
+venv
+*.pyc
+build

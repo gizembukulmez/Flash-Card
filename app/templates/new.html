@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="ui main container">
+    <form action="/cards/new" method="POST" class="ui form">
+        <div class="field">
+            <label for="topic">Topic</label>
+            <input type="text" name="topic">
+        </div>
+        <div class="field">
+            <label for="question">Question</label>
+            <textarea name="question" id="" cols="30" rows="2"></textarea>
+        </div>
+        <div class="field">
+            <label for="hint">Hint</label>
+            <textarea name="hint" id="" cols="30" rows="2"></textarea>
+        </div>
+        <div class="field">
+            <label for="answer">Answer</label>
+            <textarea name="answer" id="" cols="30" rows="5"></textarea>
+        </div>
+        <!-- Style the button using Bootstrap classes -->
+        <button type="submit" class="ui button primary btn-sm float-left mb-3">Submit</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="ui main container" style="margin-top: 110px;">
+        <div class="ui stackable grid">
+            {% for card in cards %}
+                {% if loop.index % 3 == 1 %}
+                    <div class="three column row">
+                {% endif %}
+                        <div class="column">
+                            <div class="ui cards">
+                                <div class="card">
+                                    <div class="content">
+                                        <div class="header">{{ card.topic }}</div>
+                                        <div class="description">
+                                            {{ card.question }}
+                                        </div>
+                                    </div>
+                                    <div class="extra content">
+                                        <div class="ui two buttons">
+                                            <a class="ui green button" href="/cards/{{ card.id }}">Edit</a>
+                                            <form action="/cards/{{ card.id }}/delete" method="POST">
+                                                <button class="ui red button" type="submit">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                {% if loop.index % 3 == 0 or loop.last %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
