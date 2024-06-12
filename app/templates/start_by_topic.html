@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="ui main container">
+    <h1 style="text-align: center;">Select a Topic to Start the Game</h1>
+    <div class="topic-buttons">
+        {% for topic in topics %}
+            <a class="ui big blue button" href="{{ url_for('start_game_by_topic', topic=topic) }}" style="width: 150px; height: 100px; display: flex; align-items: center; justify-content: center;">{{ topic|upper }}</a>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .topic-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px; /* Adjust as needed */
+        justify-content: flex-start;
+    }
+</style>
+{% endblock %}

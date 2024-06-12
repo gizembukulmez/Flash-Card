@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="ui main container" style="margin-top: 110px;">
+        <div class="ui stackable grid">
+            <div class="row">
+                <div class="sixteen column wide center aligned">
+                    <div class="ui two statistics">
+                        <div class="statistic animated zoomIn">
+                            <div class="value">
+                                {{ total_cards }}
+                            </div>
+                            <div class="label">
+                                Card(s)
+                            </div>
+                        </div>
+                        <div class="statistic animated zoomIn">
+                            <div class="value">
+                                {{ all_topics_len }}
+                            </div>
+                            <div class="label">
+                                Different Topic(s)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="sixteen wide column">
+                    <div class="ui three column stackable grid">
+                        <div class="column">
+                            <!-- Add Cards button -->
+                            <a class="ui big blue button" href="/cards/new">Add Cards</a>
+                        </div>
+                        <div class="column">
+                            <!-- View All Cards button -->
+                            <a class="ui big orange button" style="margin: 0 auto; display: table;" href="/all_cards">View All Cards</a>
+                        </div>
+                        <div class="column">
+                            <div class="ui labeled icon top right pointing dropdown right floated big teal button">
+                                <i class="filter icon"></i>
+                                <span class="text">Filter Cards</span>
+                                <div class="scrollable menu">
+                                    <div class="ui search icon input">
+                                        <i class="search icon"></i>
+                                        <input type="text" name="search" placeholder="Search cards...">
+                                    </div>
+                                    <div class="divider"></div>
+                                    <div class="header">
+                                        <i class="code icon"></i>
+                                        Filter by topic
+                                    </div>
+                                    {% set seq = ['blue', 'red', 'green', 'yellow', 'black', 'olive', 'violet', 'orange', 'purple', 'pink', 'brown'] %}
+                                    {% for card in all_topics %}
+                                    <a class="item" href="/cards/topic/{{ card }}">
+                                        <i class="{{ seq | random }} circle icon"></i>
+                                        {{ card }}
+                                    </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript to dynamically update the filter button's href attribute -->
+    <script>
+        // JavaScript to update the href attribute of the filter button dynamically
+        document.getElementById('filter-button').addEventListener('click', function() {
+            // Get the selected topic from the dropdown
+            var selectedTopic = document.getElementById('topic').value;
+            // Update the href attribute with the selected topic
+            this.href = "{{ url_for('get_card_topic', card_topic='" + selectedTopic + "') }}";
+        });
+    </script>
+{% endblock %}

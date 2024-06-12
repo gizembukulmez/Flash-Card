@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="ui main container" style="margin-top: 70px;">
+    <div class="row">
+        <div class="eight wide column">
+            <form action="/cards/{{card.id}}" method="POST" class="ui form">
+                <div class="field">
+                    <label for="topic">Topic</label>
+                    <input type="text" name="topic" value="{{ card.topic }}">
+                </div>
+                <div class="field">
+                    <label for="question">Question</label>
+                    <textarea name="question" id="" cols="30" rows="4">{{ card.question }}</textarea>
+                </div>
+                <div class="field">
+                    <label for="answer">Answer</label>
+                    <textarea name="answer" id="" cols="30" rows="4">{{ card.answer }}</textarea>
+                </div>
+                <div class="field">
+                    <label for="hint">Hint</label>
+                    <textarea name="hint" id="" cols="30" rows="4">{{ card.hint }}</textarea>
+                </div>
+                <button type="submit" class="ui circular teal button">Update!</button>
+            </form>
+        </div>
+        <hr>
+        <div class="eight wide column">
+            <form action="/cards/{{card.id}}/delete" method="POST">
+                <button type="submit" class="ui circular red button">Delete!</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

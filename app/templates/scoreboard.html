@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="ui main container">
+    <h1>Scoreboard</h1>
+    <table class="ui celled table">
+        <thead>
+            <tr>
+                <th>Topic</th>
+                <th>Right Answers</th>
+                <th>Wrong Answers</th>
+                <th>Hints Used</th>
+                <th>Score</th>
+                <th>Play Again</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for topic, stats in scoreboard.items() %}
+            <tr>
+                <td>{{ topic }}</td>
+                <td>{{ stats.right }}</td>
+                <td>{{ stats.wrong }}</td>
+                <td>{{ stats.hints }}</td>
+                <td>{{ stats.score }}</td>
+                <td><a class="ui button primary" href="/start_game_by_topic/{{ topic }}">Play Again</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
