@@ -11,8 +11,6 @@ flake8:
   script:
     - pip install flake8
     - flake8 . --config=flake8.cfg --count --show-source --statistics
-  tags:
-    - python
 
 run_test:
   stage: test
