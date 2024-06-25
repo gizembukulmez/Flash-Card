@@ -20,12 +20,23 @@ run_test:
   script:
     - python -m pytest
 
-build.flake8:
+build:
   stage: build
-  image: python:3.10.8-slim-buster
+  image: docker:latest
+  services:
+    - docker:dind
   before_script:
-    - pip install -r requirements.txt
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
   script:
-    - pip install flake8
-    - flake8 . --config=flake8.cfg --count --show-source --statistics
+    - docker build -t "$CI_REGISTRY_IMAGE:latest" .
+    - docker push "$CI_REGISTRY_IMAGE:latest"
 
+deploy:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - apk add --no-cache curl
+    - 'curl -X POST -H "Authorization: Bearer $DEPLOY_TOKEN"  -H "Content-Type: application/json" --data {"docker_tag": "latest"} "$(CI_API_V4_URL)/projects/$(CI_PROJECT_ID)/packages/generic/application/0.0.1" '
+
+  only:
+    - master
