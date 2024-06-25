@@ -19,3 +19,13 @@ run_test:
     - pip install -r requirements.txt
   script:
     - python -m pytest
+
+build.flake8:
+  stage: build
+  image: python:3.10.8-slim-buster
+  before_script:
+    - pip install -r requirements.txt
+  script:
+    - pip install flake8
+    - flake8 . --config=flake8.cfg --count --show-source --statistics
+
