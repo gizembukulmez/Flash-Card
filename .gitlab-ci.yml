@@ -20,6 +20,8 @@ run_test:
   script:
     - python -m pytest
 
+
+
 build:
   stage: build
   image: docker:latest
@@ -29,14 +31,27 @@ build:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
   script:
     - docker build -t "$CI_REGISTRY_IMAGE:latest" .
-    - docker push "$CI_REGISTRY_IMAGE:latest"
+    - docker save "$CI_REGISTRY_IMAGE:latest" -o my_docker_image.tar
+  artifacts:
+    paths:
+      - my_docker_image.tar
 
 deploy:
   stage: deploy
-  image: alpine:latest
+  image: docker:latest
+  services:
+    - docker:dind
   script:
+    - docker load -i my_docker_image.tar
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    - docker push "$CI_REGISTRY_IMAGE:latest"
     - apk add --no-cache curl
-    - 'curl -X POST -H "Authorization: Bearer $DEPLOY_TOKEN"  -H "Content-Type: application/json" --data {"docker_tag": "latest"} "$(CI_API_V4_URL)/projects/$(CI_PROJECT_ID)/packages/generic/application/0.0.1" '
+    - DEPLOY_URL="$(CI_API_V4_URL)/projects/$(CI_PROJECT_ID)/packages/generic/application/0.0.1"
+    - 'curl -X POST -H "Authorization: Bearer $DEPLOY_TOKEN" -H "Content-Type: application/json" --data {"docker_tag": "latest"} "$DEPLOY_URL"'
 
+  artifacts:
+    paths:
+      - my_docker_image.tar
   only:
     - master
+
