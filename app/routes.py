@@ -186,7 +186,7 @@ def start_game_by_topic(topic):
     u = User.get_by_username(current_user.id)
     # Gather cards by topic into a list
     cards = [card for card in Card.get_by_user_id(u.id) if card.topic.lower() == topic.lower()]
-    card_queue = Scheduler(cards)
+    # card_queue = Scheduler(cards)
     #####
     # Section to use algorithm to pick cards TODO
     #####
@@ -220,7 +220,7 @@ def start_game():
     """
     u = User.get_by_username(current_user.id)
     cards = Card.get_by_user_id(u.id)
-    card_queue = Scheduler(cards)
+    # card_queue = Scheduler(cards)
     #####
     # Section to use algorithm to pick cards TODO
     #####

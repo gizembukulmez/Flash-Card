@@ -22,7 +22,7 @@ class Scheduler:
 
     def calculate_next_review_date(self, card):
         """Basic scheduler algorithm: Calculate the next review date"""
-        creation_date = card.timestamp
+        # creation_date = card.timestamp
         # TODO: Check the default values once again
         right_count = card.flags.get("right", 0)
         wrong_count = card.flags.get("wrong", 0)

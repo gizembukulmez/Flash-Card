@@ -22,6 +22,7 @@ Note: This repo is the staging branch where all the commits would be made, and t
 
 ## Testing
 * Run - `python -m pytest`
+* Load-test - `locust -f ./load_testing.py`
 
 ## Git Commits
 * Run - `flake8 .` before pushing in order to keep our coding standards, have shared the .flake8 for exclusions
