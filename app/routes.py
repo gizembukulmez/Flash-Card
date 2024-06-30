@@ -186,13 +186,10 @@ def start_game_by_topic(topic):
     u = User.get_by_username(current_user.id)
     # Gather cards by topic into a list
     cards = [card for card in Card.get_by_user_id(u.id) if card.topic.lower() == topic.lower()]
-    # card_queue = Scheduler(cards)
-    #####
-    # Section to use algorithm to pick cards TODO
-    #####
-    _cards = cards
-    # card_queue.pick_cards() # Previous version of algorithm
-    # print(_cards)
+    # ASK THE ALGO TO PICK THE CARD FOR REVIEW 
+    card_queue = Scheduler(cards)
+    _cards = card_queue.pick_card() 
+    # random.shuffle(_cards) # Shuffle the selected cards randomly to not get the same order in each game 
     total_cards = len(_cards)
 
     if not _cards:
@@ -220,12 +217,9 @@ def start_game():
     """
     u = User.get_by_username(current_user.id)
     cards = Card.get_by_user_id(u.id)
-    # card_queue = Scheduler(cards)
-    #####
-    # Section to use algorithm to pick cards TODO
-    #####
-    _cards = cards
-    # card_queue.pick_cards()
+    card_queue = Scheduler(cards)
+    _cards = card_queue.pick_card()
+    # random.shuffle(_cards)
     total_cards = len(_cards)
 
     if not _cards:
@@ -275,6 +269,7 @@ def start_game():
     card = _cards[page - 1]
 
     return render_template('start_game.html', card=card, page=page, total_cards=total_cards)
+
 
 
 # ROUTE 7: ADD CARDS
